@@ -9,11 +9,16 @@ client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const { ActivityType } = require('discord.js');
+const { type } = require('node:os');
 
-
+client.on('ready', () => {
+    client.user.setActivity(`${client.guilds.cache.size} Servidores.`, { type: ActivityType.Competing });
+});
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
+
 	console.log(interaction);
 
     const command = interaction.client.commands.get(interaction.commandName);
@@ -34,7 +39,6 @@ client.on(Events.InteractionCreate, async interaction => {
 		}
 	}
 });
-
 
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
